@@ -95,12 +95,17 @@ class User extends Authenticatable implements MustVerifyEmail  //tells laravel t
         ];
     }
     public function isAdmin(): bool
-{
-    return $this->role === 'admin';
-}
+    {
+        return $this->role === 'admin';
+    }
 
-public function isUser(): bool
-{
-    return $this->role === 'user';
-}
+    public function isUser(): bool
+    {
+        return $this->role === 'user';
+    }
+
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new \App\Notifications\VerifyEmailNotification());
+    }
 }
