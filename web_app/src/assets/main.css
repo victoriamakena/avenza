@@ -1,0 +1,101 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: Inter, Roboto, Arial, Helvetica, sans-serif;
+  background: #f9fafb;
+  color: #111827;
+}
+
+a {
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.page-subtitle {
+  color: #6b7280;
+  margin-top: 6px;
+}
+
+.stat-card {
+  height: 100%;
+}
+
+.stat-label {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.empty-state {
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #f9fafb;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 430px;
+}
+
+.logo-avatar {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .page-title {
+    font-size: 1.45rem;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+}
