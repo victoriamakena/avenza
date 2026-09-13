@@ -108,7 +108,7 @@ import {
 import PageHeader from '../components/PageHeader.vue'
 import EmptyState from '../components/EmptyState.vue'
 
-import rewardService from '../services/rewardService'
+import reward from '../services/reward'
 
 const redemptions = ref([])
 
@@ -160,7 +160,7 @@ const loadRedemptions = async () => {
 
   try {
     const data =
-      await rewardService.getRedemptions()
+      await reward.getRedemptions()
 
     redemptions.value =
       data.redemptions ||

@@ -3,25 +3,25 @@ import {
   createWebHistory,
 } from 'vue-router'
 
-import LoginView from '../views/LoginView.vue'
-import ForgotPasswordView from '../views/ForgotPasswordView.vue'
-import ResetPasswordView from '../views/ResetPasswordView.vue'
+import Login from '../views/Login.vue'
+import ForgotPassword from '../views/ForgotPassword.vue'
+import ResetPassword from '../views/ResetPassword.vue'
 
-import DashboardView from '../views/DashboardView.vue'
+import Dashboard from '../views/Dashboard.vue'
 
-import UsersView from '../views/UsersView.vue'
-import UserDetailsView from '../views/UserDetailsView.vue'
+import Users from '../views/Users.vue'
+import UserDetails from '../views/UserDetails.vue'
 
-import GoalsView from '../views/GoalsView.vue'
-import GoalDetailsView from '../views/GoalDetailsView.vue'
+import Goals from '../views/Goals.vue'
+import GoalDetails from '../views/GoalDetails.vue'
 
-import LessonsView from '../views/LessonsView.vue'
-import AchievementsView from '../views/AchievementsView.vue'
+import Lessons from '../views/Lessons.vue'
+import Achievements from '../views/Achievements.vue'
 
-import RewardsView from '../views/RewardsView.vue'
-import RedemptionsView from '../views/RedemptionsView.vue'
+import Rewards from '../views/Rewards.vue'
+import Redemptions from '../views/Redemptions.vue'
 
-import { useAuthStore } from '../stores/authStore'
+import { useAuth } from '../stores/auth'
 
 const routes = [
   {
@@ -32,19 +32,19 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: LoginView,
+    component: Login,
   },
 
   {
     path: '/forgot-password',
     name: 'ForgotPassword',
-    component: ForgotPasswordView,
+    component: ForgotPassword,
   },
 
   {
     path: '/reset-password',
     name: 'ResetPassword',
-    component: ResetPasswordView,
+    component: ResetPassword,
   },
 
   {
@@ -62,55 +62,55 @@ const routes = [
       {
         path: '',
         name: 'Dashboard',
-        component: DashboardView,
+        component: Dashboard,
       },
 
       {
         path: 'users',
         name: 'Users',
-        component: UsersView,
+        component: Users,
       },
 
       {
         path: 'users/:id',
         name: 'UserDetails',
-        component: UserDetailsView,
+        component: UserDetails,
       },
 
       {
         path: 'goals',
         name: 'Goals',
-        component: GoalsView,
+        component: Goals,
       },
 
       {
         path: 'goals/:id',
         name: 'GoalDetails',
-        component: GoalDetailsView,
+        component: GoalDetails,
       },
 
       {
         path: 'lessons',
         name: 'Lessons',
-        component: LessonsView,
+        component: Lessons,
       },
 
       {
         path: 'achievements',
         name: 'Achievements',
-        component: AchievementsView,
+        component: Achievements,
       },
 
       {
         path: 'rewards',
         name: 'Rewards',
-        component: RewardsView,
+        component: Rewards,
       },
 
       {
         path: 'redemptions',
         name: 'Redemptions',
-        component: RedemptionsView,
+        component: Redemptions,
       },
     ],
   },
@@ -128,7 +128,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
-  const authStore = useAuthStore()
+  const authStore = useAuth()
 
   if (
     to.meta.requiresAuth &&
