@@ -143,7 +143,7 @@ const loadUsers = async () => {
       await userService.getUsers()
 
     users.value =
-      data.users ||
+      data.users?.data ||
       data.data ||
       data
   } catch (error) {

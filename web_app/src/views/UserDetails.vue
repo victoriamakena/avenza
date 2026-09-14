@@ -174,7 +174,7 @@ const loadUser = async () => {
       )
 
     user.value =
-      data.user ||
+      data.user?.data ||
       data
   } catch (error) {
     errorMessage.value =

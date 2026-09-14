@@ -232,7 +232,7 @@ const loadRewards = async () => {
       await rewardService.getRewards()
 
     rewards.value =
-      data.rewards ||
+      data.rewards?.data ||
       data.data ||
       data
   } catch (error) {

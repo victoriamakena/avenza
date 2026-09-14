@@ -178,7 +178,7 @@ const loadLessons = async () => {
       await lessonService.getLessons()
 
     lessons.value =
-      data.lessons ||
+      data.lessons?.data ||
       data.data ||
       data
   } catch (error) {

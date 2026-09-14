@@ -126,7 +126,7 @@ const loadGoals = async () => {
       await goalService.getGoals()
 
     goals.value =
-      data.goals ||
+      data.goals?.data ||
       data.data ||
       data
   } catch (error) {

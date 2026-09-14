@@ -163,7 +163,7 @@ const loadRedemptions = async () => {
       await reward.getRedemptions()
 
     redemptions.value =
-      data.redemptions ||
+      data.redemptions?.data ||
       data.data ||
       data
   } catch (error) {

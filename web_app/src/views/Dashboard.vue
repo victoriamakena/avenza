@@ -24,7 +24,7 @@
           label="Total Users"
           :value="statistics.total_users"
           icon="mdi-account-group-outline"
-          color="primary"
+          color="secondary"
         />
       </v-col>
 
