@@ -85,13 +85,14 @@
 <script setup>
 import { ref } from 'vue'
 
-import authService from '../services/authService'
+import { useAuthStore } from '../stores/auth'
 
 const email = ref('')
 
 const loading = ref(false)
 const successMessage = ref('')
 const errorMessage = ref('')
+const authStore = useAuthStore()
 
 const submit = async () => {
   successMessage.value = ''
@@ -107,8 +108,7 @@ const submit = async () => {
   loading.value = true
 
   try {
-    await authService.forgotPassword(email.value)
-
+    await authStore.forgotPassword(email.value)
     successMessage.value =
       'If an account exists for that email, password reset instructions have been sent.'
   } catch (error) {

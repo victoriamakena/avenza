@@ -1,30 +1,33 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
 
 import 'package:mobile_app/main.dart';
+import 'package:mobile_app/stores/app_state.dart';
+import 'package:mobile_app/stores/auth_store.dart';
+import 'package:mobile_app/stores/goal_store.dart';
+import 'package:mobile_app/stores/savings_store.dart';
+import 'package:mobile_app/stores/reward_store.dart';
+import 'package:mobile_app/stores/learn_store.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('App boots and shows the splash screen', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => AppState()),
+          ChangeNotifierProvider(create: (_) => AuthStore()),
+          ChangeNotifierProvider(create: (_) => GoalStore()),
+          ChangeNotifierProvider(create: (_) => SavingsStore()),
+          ChangeNotifierProvider(create: (_) => RewardStore()),
+          ChangeNotifierProvider(create: (_) => LearnStore()),
+        ],
+        child: const MyApp(),
+      ),
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('Avenza'), findsOneWidget);
   });
 }

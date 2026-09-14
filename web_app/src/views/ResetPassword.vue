@@ -101,13 +101,10 @@
 
 <script setup>
 import { reactive, ref } from 'vue'
-import {
-  useRoute,
-  useRouter,
-} from 'vue-router'
+import { useRoute,useRouter, } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
 
-import authService from '../services/authService'
-
+const authStore = useAuthStore()
 const route = useRoute()
 const router = useRouter()
 
@@ -155,7 +152,7 @@ const submit = async () => {
   loading.value = true
 
   try {
-    await authService.resetPassword({
+    await authStore.resetPassword({
       token: form.token,
       email: form.email,
       password: form.password,
