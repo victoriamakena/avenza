@@ -6,20 +6,20 @@ class GoalStore extends ChangeNotifier {
     Goal(
       id: 1,
       name: 'Emergency Fund',
+      description: 'Build a safety cushion',
       targetAmount: 20000,
       savedAmount: 8500,
-      deadline: DateTime.now().add(
-        const Duration(days: 120),
-      ),
+      targetDate: DateTime.now().add(const Duration(days: 120)),
+      icon: '🛡️',
     ),
     Goal(
       id: 2,
       name: 'New Laptop',
+      description: 'Save for school and work',
       targetAmount: 60000,
       savedAmount: 18000,
-      deadline: DateTime.now().add(
-        const Duration(days: 240),
-      ),
+      targetDate: DateTime.now().add(const Duration(days: 240)),
+      icon: '💻',
     ),
   ];
 
@@ -34,16 +34,20 @@ class GoalStore extends ChangeNotifier {
 
   void addGoal({
     required String name,
+    required String description,
     required double targetAmount,
-    required DateTime deadline,
+    required DateTime targetDate,
+    required String icon,
   }) {
     _goals.add(
       Goal(
         id: DateTime.now().millisecondsSinceEpoch,
         name: name,
+        description: description,
         targetAmount: targetAmount,
         savedAmount: 0,
-        deadline: deadline,
+        targetDate: targetDate,
+        icon: icon,
       ),
     );
 
@@ -51,9 +55,7 @@ class GoalStore extends ChangeNotifier {
   }
 
   void addSavings(int goalId, double amount) {
-    final index = _goals.indexWhere(
-      (goal) => goal.id == goalId,
-    );
+    final index = _goals.indexWhere((goal) => goal.id == goalId);
 
     if (index == -1) return;
 
@@ -62,9 +64,11 @@ class GoalStore extends ChangeNotifier {
     _goals[index] = Goal(
       id: goal.id,
       name: goal.name,
+      description: goal.description,
       targetAmount: goal.targetAmount,
       savedAmount: goal.savedAmount + amount,
-      deadline: goal.deadline,
+      targetDate: goal.targetDate,
+      icon: goal.icon,
     );
 
     notifyListeners();
