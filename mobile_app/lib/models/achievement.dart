@@ -18,11 +18,11 @@ class Achievement {
   factory Achievement.fromJson(Map<String, dynamic> json) {
     return Achievement(
       id: json['id'],
-      title: json['title'] ?? '',
+      title: json['name'] ?? '',
       description: json['description'] ?? '',
       icon: json['icon'] ?? '⭐',
       xpReward: int.tryParse(json['xp_reward'].toString()) ?? 0,
-      unlocked: json['unlocked'] ?? false,
+      unlocked: json['is_unlocked'] ?? false,
     );
   }
 }

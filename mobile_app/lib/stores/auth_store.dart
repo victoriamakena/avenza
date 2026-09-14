@@ -1,42 +1,39 @@
 import 'package:flutter/foundation.dart';
 import '../models/user.dart';
+import '../services/auth_service.dart';
 
 class AuthStore extends ChangeNotifier {
+  final AuthService _authService = AuthService();
+
   AppUser? _user;
   bool _loading = false;
+  String? errorMessage;
 
   AppUser? get user => _user;
   bool get isLoggedIn => _user != null;
   bool get loading => _loading;
 
-  Future<void> login(String email, String password) async {
+  Future<bool> login(String email, String password) async {
     _loading = true;
+    errorMessage = null;
     notifyListeners();
 
-    await Future.delayed(const Duration(milliseconds: 700));
-
-    _user = AppUser(
-      id: 1,
-      name: 'Victoria',
-      email: email,
-      phone: '+254700000000',
-      xp: 240,
-      rewardPoints: 120,
-      streak: 6,
-      emailVerified: true,
-    );
-
-    _loading = false;
-    notifyListeners();
+    try {
+      final json = await _authService.login(email, password);
+      _user = AppUser.fromJson(json);
+      return true;
+    } catch (e) {
+      errorMessage = e.toString();
+      return false;
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> logout() async {
+    await _authService.logout();
     _user = null;
-    notifyListeners();
-  }
-
-  void setUser(AppUser user) {
-    _user = user;
     notifyListeners();
   }
 }

@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/screens/learn/learn_screen.dart';
+import 'package:mobile_app/services/reward_service.dart';
+import 'package:mobile_app/stores/goal_store.dart';
+import 'package:mobile_app/stores/learn_store.dart';
+import 'package:mobile_app/stores/reward_store.dart';
+import 'package:mobile_app/stores/savings_store.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/avenza_button.dart';
@@ -105,36 +111,49 @@ class _LoginScreenState
 
               const SizedBox(height: 16),
 
-             AvenzaButton(
-                      text: 'Login',
-                      onPressed: () async {
-                        final email = emailController.text.trim();
-                        final password = passwordController.text;
+            AvenzaButton(
+                    text: 'Login',
+                    onPressed: () async {
+                      final email = emailController.text.trim();
+                      final password = passwordController.text;
 
-                        if (email.isEmpty || password.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please enter your email and password.'),
-                            ),
-                          );
-                          return;
-                        }
+                      if (email.isEmpty || password.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Please enter your email and password.')),
+                        );
+                        return;
+                      }
 
-                        await context.read<AuthStore>().login(
-                              email,
-                              password,
-                            );
+                      final success = await context.read<AuthStore>().login(email, password);
 
-                        if (!context.mounted) return;
+                      if (!context.mounted) return;
 
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const AppNavigation(),
+                      if (!success) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(context.read<AuthStore>().errorMessage ?? 'Login failed.'),
                           ),
                         );
-                      },
-                    ),
+                        return;
+                      }
+
+                      // Load everything from the real backend before showing the main app.
+                      await Future.wait([
+                        context.read<GoalStore>().fetchGoals(),
+                        context.read<SavingsStore>().fetchTransactions(),
+                        context.read<RewardStore>().fetchRewards(),
+                        context.read<RewardStore>().fetchAchievements(),
+                        context.read<LearnStore>().fetchLessons(),
+                      ]);
+
+                      if (!context.mounted) return;
+
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => const AppNavigation()),
+                      );
+                    },
+                  ),
 
               const SizedBox(height: 24),
 

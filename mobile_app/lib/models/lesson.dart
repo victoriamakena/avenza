@@ -21,8 +21,7 @@ class Lesson {
       title: json['title'] ?? '',
       description: json['description'] ?? '',
       category: json['category'] ?? 'Money Basics',
-      durationMinutes:
-          int.tryParse(json['duration_minutes'].toString()) ?? 5,
+      durationMinutes: int.tryParse(json['estimated_minutes'].toString()) ?? 5,
       completed: json['completed'] ?? false,
     );
   }

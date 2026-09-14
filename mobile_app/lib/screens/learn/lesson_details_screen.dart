@@ -102,10 +102,10 @@ class LessonDetailsScreen extends StatelessWidget {
             icon: Icons.check,
             onPressed: lesson.completed
                 ? null
-                : () {
-                    context
-                        .read<LearnStore>()
-                        .completeLesson(lesson.id);
+                : () async {
+                    await context.read<LearnStore>().completeLesson(lesson.id);
+
+                    if (!context.mounted) return;
 
                     Navigator.pop(context);
                   },

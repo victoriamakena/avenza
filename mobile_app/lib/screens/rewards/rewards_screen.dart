@@ -73,22 +73,21 @@ class RewardsScreen extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 12),
               child: RewardCard(
                 reward: reward,
-                onRedeem: () {
-                  final success =
-                      context.read<RewardStore>().redeemReward(
-                            reward,
-                          );
+                onRedeem: () async {
+                      final success = await context.read<RewardStore>().redeemReward(reward);
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        success
-                            ? 'Reward redeemed successfully.'
-                            : 'You need more points for this reward.',
-                      ),
-                    ),
-                  );
-                },
+                      if (!context.mounted) return;
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            success
+                                ? 'Reward redeemed successfully.'
+                                : 'You need more points for this reward.',
+                          ),
+                        ),
+                      );
+},
               ),
             ),
           ),

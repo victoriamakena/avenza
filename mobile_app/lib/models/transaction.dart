@@ -13,7 +13,7 @@ class SavingsTransaction {
     required this.date,
   });
 
-  bool get isDeposit => type == 'deposit';
+  bool get isDeposit => type == 'saving';
 
   factory SavingsTransaction.fromJson(Map<String, dynamic> json) {
     return SavingsTransaction(
@@ -21,7 +21,7 @@ class SavingsTransaction {
       amount: double.tryParse(json['amount'].toString()) ?? 0,
       type: json['type'] ?? 'deposit',
       description: json['description'] ?? '',
-      date: DateTime.tryParse(json['date'].toString()) ?? DateTime.now(),
+      date: DateTime.tryParse(json['created_at'].toString()) ?? DateTime.now(),
     );
   }
 }

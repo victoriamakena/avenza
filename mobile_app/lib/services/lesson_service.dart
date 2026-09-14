@@ -1,16 +1,14 @@
 import 'api_service.dart';
 
 class LessonService {
-  final ApiService api;
-
-  LessonService(this.api);
+  final ApiService api = ApiService.instance;
 
   Future<List<dynamic>> getLessons() async {
-    // GET /api/lessons
-    return [];
+    final data = await api.get('/lessons');
+    return data['lessons'] ?? [];
   }
 
   Future<void> completeLesson(int lessonId) async {
-    // POST /api/lessons/{id}/complete
+    await api.post('/lessons/$lessonId/complete');
   }
 }

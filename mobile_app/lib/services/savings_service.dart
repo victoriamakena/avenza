@@ -1,18 +1,10 @@
 import 'api_service.dart';
 
 class SavingsService {
-  final ApiService api;
-
-  SavingsService(this.api);
+  final ApiService api = ApiService.instance;
 
   Future<List<dynamic>> getTransactions() async {
-    // GET /api/savings/transactions
-    return [];
-  }
-
-  Future<void> addSavings(
-    Map<String, dynamic> data,
-  ) async {
-    // POST /api/savings
+    final data = await api.get('/transactions');
+    return data['transactions']?['data'] ?? [];
   }
 }

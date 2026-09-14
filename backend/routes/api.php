@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\RewardManagementController;
 use App\Http\Controllers\Admin\RedemptionManagementController;
 use App\Http\Controllers\Admin\NotificationManagementController;
 use App\Http\Controllers\Admin\UserManagementController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\UssdController;
 
 // Public Authentication Routes
@@ -60,6 +61,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/dashboard', [AdminDashboardController::class, 'index']);
 
     // Goals
     Route::prefix('goals')->group(function () {

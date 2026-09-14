@@ -18,12 +18,11 @@ class Reward {
   factory Reward.fromJson(Map<String, dynamic> json) {
     return Reward(
       id: json['id'],
-      title: json['title'] ?? '',
+      title: json['name'] ?? '',
       description: json['description'] ?? '',
-      pointsRequired:
-          int.tryParse(json['points_required'].toString()) ?? 0,
-      category: json['category'] ?? 'Voucher',
-      available: json['available'] ?? true,
+      pointsRequired: int.tryParse(json['points_cost'].toString()) ?? 0,
+      category: json['type'] ?? 'Voucher',
+      available: true,
     );
   }
 }
