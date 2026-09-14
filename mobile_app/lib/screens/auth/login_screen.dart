@@ -1,206 +1,194 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/app_button.dart';
-import '../../components/app_text_field.dart';
-import '../../stores/auth_store.dart';
-import '../home/home_screen.dart';
+import '../../widgets/avenza_button.dart';
+import '../../widgets/avenza_text_field.dart';
+import '../../navigation/app_navigation.dart';
 import 'forgot_password_screen.dart';
 import 'register_screen.dart';
+import '../../stores/auth_store.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({
-    super.key,
-  });
+  const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<LoginScreen> createState() =>
+      _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
+class _LoginScreenState
+    extends State<LoginScreen> {
 
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final emailController =
+      TextEditingController();
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
+  final passwordController =
+      TextEditingController();
 
-    super.dispose();
-  }
+  bool loading = false;
 
   Future<void> _login() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+    setState(() {
+      loading = true;
+    });
 
-    final authStore = context.read<AuthStore>();
-
-    final success = await authStore.login(
-      email: _emailController.text.trim(),
-      password: _passwordController.text,
+    await Future.delayed(
+      const Duration(milliseconds: 700),
     );
 
     if (!mounted) return;
 
-    if (success) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (_) => const HomeScreen(),
-        ),
-        (route) => false,
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            authStore.error ?? 'Login failed.',
-          ),
-        ),
-      );
-    }
+    setState(() {
+      loading = false;
+    });
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const AppNavigation(),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final loading = context.watch<AuthStore>().loading;
-
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 430,
-              ),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                  children: [
-                    const Icon(
-                      Icons.savings_outlined,
-                      size: 52,
-                      color: Color(0xFF1E3A8A),
-                    ),
+        child: SingleChildScrollView(
+          padding:
+              const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 40),
 
-                    const SizedBox(height: 20),
-
-                    const Text(
-                      'Welcome back',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    const Text(
-                      'Log in to continue your savings journey.',
-                      style: TextStyle(
-                        color: Color(0xFF6B7280),
-                        fontSize: 16,
-                      ),
-                    ),
-
-                    const SizedBox(height: 32),
-
-                    AppTextField(
-                      label: 'Email',
-                      controller: _emailController,
-                      keyboardType:
-                          TextInputType.emailAddress,
-                      prefixIcon: Icons.email_outlined,
-                      validator: (value) {
-                        if (value == null ||
-                            value.trim().isEmpty) {
-                          return 'Enter your email.';
-                        }
-
-                        if (!value.contains('@')) {
-                          return 'Enter a valid email.';
-                        }
-
-                        return null;
-                      },
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    AppTextField(
-                      label: 'Password',
-                      controller: _passwordController,
-                      obscureText: true,
-                      prefixIcon: Icons.lock_outline,
-                      validator: (value) {
-                        if (value == null ||
-                            value.isEmpty) {
-                          return 'Enter your password.';
-                        }
-
-                        return null;
-                      },
-                    ),
-
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  const ForgotPasswordScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          'Forgot password?',
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    AppButton(
-                      text: 'Log In',
-                      loading: loading,
-                      onPressed: _login,
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Don't have an account?",
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    const RegisterScreen(),
-                              ),
-                            );
-                          },
-                          child: const Text('Create one'),
-                        ),
-                      ],
-                    ),
-                  ],
+              const Text(
+                'Welcome back 👋',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
+
+              const SizedBox(height: 8),
+
+              const Text(
+                'Log in to continue your savings journey.',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Color(0xFF6B7280),
+                ),
+              ),
+
+              const SizedBox(height: 36),
+
+              AvenzaTextField(
+                label: 'Email',
+                hint: 'you@example.com',
+                controller: emailController,
+                keyboardType:
+                    TextInputType.emailAddress,
+                prefixIcon: Icons.email_outlined,
+              ),
+
+              const SizedBox(height: 18),
+
+              AvenzaTextField(
+                label: 'Password',
+                controller: passwordController,
+                obscureText: true,
+                prefixIcon:
+                    Icons.lock_outline,
+              ),
+
+              Align(
+                alignment:
+                    Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            const ForgotPasswordScreen(),
+                      ),
+                    );
+                  },
+                  child:
+                      const Text('Forgot password?'),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+             AvenzaButton(
+                      text: 'Login',
+                      onPressed: () async {
+                        final email = emailController.text.trim();
+                        final password = passwordController.text;
+
+                        if (email.isEmpty || password.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please enter your email and password.'),
+                            ),
+                          );
+                          return;
+                        }
+
+                        await context.read<AuthStore>().login(
+                              email,
+                              password,
+                            );
+
+                        if (!context.mounted) return;
+
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const AppNavigation(),
+                          ),
+                        );
+                      },
+                    ),
+
+              const SizedBox(height: 24),
+
+              Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Don't have an account? ",
+                    style: TextStyle(
+                      color: Color(0xFF6B7280),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              const RegisterScreen(),
+                        ),
+                      );
+                    },
+                    child:
+                        const Text('Create one'),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

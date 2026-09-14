@@ -1,67 +1,81 @@
 import 'package:flutter/material.dart';
+import 'app_colors.dart';
 
 class AppTheme {
-  static const Color primary = Color(0xFF1E3A8A);
-  static const Color secondary = Color(0xFF10B981);
-  static const Color accent = Color(0xFFFBBF24);
-
-  static const Color background = Color(0xFFF9FAFB);
-  static const Color surface = Color(0xFFFFFFFF);
-
-  static const Color textPrimary = Color(0xFF111827);
-  static const Color textSecondary = Color(0xFF6B7280);
-
-  static const Color error = Color(0xFFDC2626);
-
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
-    scaffoldBackgroundColor: background,
 
     colorScheme: ColorScheme.fromSeed(
-      seedColor: primary,
-      primary: primary,
-      secondary: secondary,
-      surface: surface,
-      error: error,
+      seedColor: AppColors.primary,
+      primary: AppColors.primary,
+      secondary: AppColors.emerald,
+      surface: AppColors.white,
+      error: AppColors.error,
     ),
 
+    scaffoldBackgroundColor: AppColors.background,
+
     appBarTheme: const AppBarTheme(
-      backgroundColor: background,
-      foregroundColor: textPrimary,
+      backgroundColor: AppColors.background,
+      foregroundColor: AppColors.text,
       elevation: 0,
       centerTitle: false,
     ),
 
+    textTheme: const TextTheme(
+      headlineLarge: TextStyle(
+        fontSize: 30,
+        fontWeight: FontWeight.bold,
+        color: AppColors.text,
+      ),
+      headlineMedium: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: AppColors.text,
+      ),
+      titleLarge: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+        color: AppColors.text,
+      ),
+      titleMedium: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: AppColors.text,
+      ),
+      bodyLarge: TextStyle(
+        fontSize: 16,
+        color: AppColors.text,
+      ),
+      bodyMedium: TextStyle(
+        fontSize: 14,
+        color: AppColors.secondaryText,
+      ),
+    ),
+
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: Colors.white,
+      fillColor: AppColors.white,
 
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(14),
         borderSide: const BorderSide(
-          color: Color(0xFFD1D5DB),
+          color: Color(0xFFE5E7EB),
         ),
       ),
 
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(14),
         borderSide: const BorderSide(
-          color: Color(0xFFD1D5DB),
+          color: Color(0xFFE5E7EB),
         ),
       ),
 
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(14),
         borderSide: const BorderSide(
-          color: primary,
+          color: AppColors.primary,
           width: 2,
-        ),
-      ),
-
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(
-          color: error,
         ),
       ),
 
@@ -71,29 +85,24 @@ class AppTheme {
       ),
     ),
 
+    cardTheme: CardThemeData(
+      color: AppColors.white,
+      elevation: 0,
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+      ),
+    ),
+
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: primary,
+        backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         minimumSize: const Size(double.infinity, 52),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(14),
         ),
         elevation: 0,
-      ),
-    ),
-
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        foregroundColor: primary,
-      ),
-    ),
-
-    cardTheme: CardThemeData(
-      color: Colors.white,
-      elevation: 1,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
       ),
     ),
   );

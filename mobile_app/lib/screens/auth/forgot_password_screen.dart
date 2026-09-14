@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../components/app_button.dart';
-import '../../components/app_text_field.dart';
-import '../../services/auth_service.dart';
+import '../../widgets/avenza_button.dart';
+import '../../widgets/avenza_text_field.dart';
 
-class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({
-    super.key,
-  });
+class ForgotPasswordScreen
+    extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
 
   @override
   State<ForgotPasswordScreen> createState() =>
@@ -16,136 +14,100 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState
     extends State<ForgotPasswordScreen> {
-  final _formKey = GlobalKey<FormState>();
 
-  final _emailController = TextEditingController();
+  final emailController =
+      TextEditingController();
 
-  bool _loading = false;
+  bool loading = false;
+
+  Future<void> _sendResetLink() async {
+    setState(() {
+      loading = true;
+    });
+
+    await Future.delayed(
+      const Duration(milliseconds: 700),
+    );
+
+    if (!mounted) return;
+
+    setState(() {
+      loading = false;
+    });
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(
+      const SnackBar(
+        content: Text(
+          'If the email exists, a reset link has been sent.',
+        ),
+      ),
+    );
+  }
 
   @override
   void dispose() {
-    _emailController.dispose();
-
+    emailController.dispose();
     super.dispose();
-  }
-
-  Future<void> _sendResetLink() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-
-    setState(() {
-      _loading = true;
-    });
-
-    try {
-      await AuthService.forgotPassword(
-        email: _emailController.text.trim(),
-      );
-
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'If the email exists, a password reset link has been sent.',
-          ),
-        ),
-      );
-    } catch (e) {
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString()),
-        ),
-      );
-    } finally {
-      if (mounted) {
-        setState(() {
-          _loading = false;
-        });
-      }
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Forgot password'),
+        title: const Text(
+          'Reset password',
+        ),
       ),
+
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 500,
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
-                children: [
-                  const Icon(
-                    Icons.lock_reset,
-                    size: 48,
-                    color: Color(0xFF1E3A8A),
-                  ),
+        child: Padding(
+          padding:
+              const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
 
-                  const SizedBox(height: 20),
-
-                  const Text(
-                    'Reset your password',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  const SizedBox(height: 8),
-
-                  const Text(
-                    'Enter your email and we will send you instructions to reset your password.',
-                    style: TextStyle(
-                      color: Color(0xFF6B7280),
-                      fontSize: 16,
-                    ),
-                  ),
-
-                  const SizedBox(height: 28),
-
-                  AppTextField(
-                    label: 'Email',
-                    controller: _emailController,
-                    keyboardType:
-                        TextInputType.emailAddress,
-                    prefixIcon: Icons.email_outlined,
-                    validator: (value) {
-                      if (value == null ||
-                          value.trim().isEmpty) {
-                        return 'Enter your email.';
-                      }
-
-                      if (!value.contains('@')) {
-                        return 'Enter a valid email.';
-                      }
-
-                      return null;
-                    },
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  AppButton(
-                    text: 'Send Reset Link',
-                    loading: _loading,
-                    onPressed: _sendResetLink,
-                  ),
-                ],
+              const Text(
+                'Forgot your password?',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
+
+              const SizedBox(height: 10),
+
+              const Text(
+                'Enter your email address and we will send you instructions to reset your password.',
+                style: TextStyle(
+                  color: Color(0xFF6B7280),
+                  height: 1.5,
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              AvenzaTextField(
+                label: 'Email',
+                controller: emailController,
+                keyboardType:
+                    TextInputType.emailAddress,
+                prefixIcon:
+                    Icons.email_outlined,
+              ),
+
+              const SizedBox(height: 24),
+
+              AvenzaButton(
+                text: 'Send Reset Link',
+                loading: loading,
+                onPressed:
+                    _sendResetLink,
+              ),
+            ],
           ),
         ),
       ),

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../services/storage_service.dart';
-import '../auth/login_screen.dart';
+import '../../stores/app_state.dart';
+import '../auth/register_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({
-    super.key,
-  });
+  const OnboardingScreen({super.key});
 
   @override
   State<OnboardingScreen> createState() =>
@@ -15,92 +14,101 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState
     extends State<OnboardingScreen> {
+
   final PageController _controller =
       PageController();
 
   int _currentPage = 0;
 
-  final List<OnboardingPage> pages = [
-    OnboardingPage(
-      icon: Icons.lightbulb_outline,
-      title: 'Start with a dream',
+  final pages = const [
+    _OnboardingData(
+      icon: Icons.flag_outlined,
+      title: 'Save for what matters',
       description:
-          'Choose something important to you and turn it into a savings goal.',
+          'Turn your dreams into clear savings goals and take small steps toward them.',
     ),
-    OnboardingPage(
-      icon: Icons.savings_outlined,
-      title: 'Save at your pace',
+    _OnboardingData(
+      icon: Icons.trending_up,
+      title: 'Build healthy money habits',
       description:
-          'Build a consistent savings habit with simple progress tracking.',
+          'Save consistently, track your progress and understand how your money habits grow.',
     ),
-    OnboardingPage(
+    _OnboardingData(
       icon: Icons.school_outlined,
-      title: 'Learn as you grow',
+      title: 'Learn while you save',
       description:
-          'Get practical financial lessons that help you make better money decisions.',
+          'Learn simple financial skills that help you make better everyday money decisions.',
     ),
   ];
 
-  @override
-  void dispose() {
-    _controller.dispose();
-
-    super.dispose();
-  }
-
   Future<void> _finish() async {
-    await StorageService.setOnboardingComplete();
+    await context
+        .read<AppState>()
+        .completeOnboarding();
 
     if (!mounted) return;
 
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (_) => const LoginScreen(),
+        builder: (_) =>
+            const RegisterScreen(),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final page = pages[_currentPage];
+
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: PageView.builder(
-                controller: _controller,
-                itemCount: pages.length,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentPage = index;
-                  });
-                },
-                itemBuilder: (context, index) {
-                  final page = pages[index];
+        child: Padding(
+          padding:
+              const EdgeInsets.all(24),
+          child: Column(
+            children: [
+              Align(
+                alignment:
+                    Alignment.centerRight,
+                child: TextButton(
+                  onPressed: _finish,
+                  child: const Text('Skip'),
+                ),
+              ),
 
-                  return Padding(
-                    padding:
-                        const EdgeInsets.all(32),
-                    child: Column(
+              Expanded(
+                child: PageView.builder(
+                  controller: _controller,
+                  itemCount: pages.length,
+                  onPageChanged: (index) {
+                    setState(() {
+                      _currentPage = index;
+                    });
+                  },
+                  itemBuilder:
+                      (context, index) {
+                    final item = pages[index];
+
+                    return Column(
                       mainAxisAlignment:
                           MainAxisAlignment.center,
                       children: [
                         Container(
-                          width: 140,
-                          height: 140,
+                          height: 130,
+                          width: 130,
                           decoration:
                               BoxDecoration(
                             color: const Color(
-                              0xFFEFF6FF,
+                              0xFFDBEAFE,
                             ),
                             borderRadius:
                                 BorderRadius.circular(
-                              70,
+                              35,
                             ),
                           ),
                           child: Icon(
-                            page.icon,
+                            item.icon,
                             size: 70,
                             color: const Color(
                               0xFF1E3A8A,
@@ -111,7 +119,7 @@ class _OnboardingScreenState
                         const SizedBox(height: 40),
 
                         Text(
-                          page.title,
+                          item.title,
                           textAlign:
                               TextAlign.center,
                           style: const TextStyle(
@@ -124,7 +132,7 @@ class _OnboardingScreenState
                         const SizedBox(height: 16),
 
                         Text(
-                          page.description,
+                          item.description,
                           textAlign:
                               TextAlign.center,
                           style: const TextStyle(
@@ -136,87 +144,94 @@ class _OnboardingScreenState
                           ),
                         ),
                       ],
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
 
-            Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.center,
-              children: List.generate(
-                pages.length,
-                (index) {
-                  final selected =
-                      index == _currentPage;
-
-                  return Container(
-                    margin:
-                        const EdgeInsets.symmetric(
-                      horizontal: 4,
-                    ),
-                    width: selected ? 24 : 8,
-                    height: 8,
-                    decoration:
-                        BoxDecoration(
-                      color: selected
-                          ? const Color(
-                              0xFF1E3A8A,
-                            )
-                          : const Color(
-                              0xFFD1D5DB,
-                            ),
-                      borderRadius:
-                          BorderRadius.circular(10),
-                    ),
-                  );
-                },
+              Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.center,
+                children: List.generate(
+                  pages.length,
+                  (index) {
+                    return AnimatedContainer(
+                      duration:
+                          const Duration(
+                        milliseconds: 250,
+                      ),
+                      margin:
+                          const EdgeInsets.symmetric(
+                        horizontal: 4,
+                      ),
+                      height: 8,
+                      width: index ==
+                              _currentPage
+                          ? 28
+                          : 8,
+                      decoration:
+                          BoxDecoration(
+                        color: index ==
+                                _currentPage
+                            ? const Color(
+                                0xFF1E3A8A,
+                              )
+                            : const Color(
+                                0xFFD1D5DB,
+                              ),
+                        borderRadius:
+                            BorderRadius.circular(
+                          20,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
 
-            Padding(
-              padding: const EdgeInsets.all(24),
-              child: SizedBox(
+              const SizedBox(height: 24),
+
+              SizedBox(
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (_currentPage ==
+                    if (_currentPage <
                         pages.length - 1) {
-                      _finish();
-                    } else {
                       _controller.nextPage(
                         duration:
                             const Duration(
                           milliseconds: 300,
                         ),
-                        curve: Curves.easeInOut,
+                        curve:
+                            Curves.easeInOut,
                       );
+                    } else {
+                      _finish();
                     }
                   },
                   child: Text(
                     _currentPage ==
                             pages.length - 1
                         ? 'Get Started'
-                        : 'Next',
+                        : 'Continue',
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-class OnboardingPage {
+class _OnboardingData {
   final IconData icon;
   final String title;
   final String description;
 
-  OnboardingPage({
+  const _OnboardingData({
     required this.icon,
     required this.title,
     required this.description,

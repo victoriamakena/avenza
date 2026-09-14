@@ -1,31 +1,31 @@
 class Goal {
   final int id;
-  final String title;
-  final String category;
+  final String name;
+  final String description;
   final double targetAmount;
   final double savedAmount;
-  final String? deadline;
+  final DateTime targetDate;
+  final String icon;
 
   Goal({
     required this.id,
-    required this.title,
-    required this.category,
+    required this.name,
+    required this.description,
     required this.targetAmount,
     required this.savedAmount,
-    this.deadline,
+    required this.targetDate,
+    required this.icon,
   });
 
   double get progress {
     if (targetAmount <= 0) return 0;
 
-    final value = savedAmount / targetAmount;
-
-    return value.clamp(0.0, 1.0);
+    return (savedAmount / targetAmount)
+        .clamp(0.0, 1.0);
   }
 
-  double get remainingAmount {
-    final remaining = targetAmount - savedAmount;
-
-    return remaining < 0 ? 0 : remaining;
+  double get remaining {
+    return (targetAmount - savedAmount)
+        .clamp(0.0, double.infinity);
   }
 }

@@ -1,137 +1,42 @@
 import 'package:flutter/foundation.dart';
-
 import '../models/user.dart';
-import '../services/auth_service.dart';
-import '../services/storage_service.dart';
 
 class AuthStore extends ChangeNotifier {
-  User? _user;
-
+  AppUser? _user;
   bool _loading = false;
 
-  String? _error;
-
-  User? get user => _user;
-
+  AppUser? get user => _user;
+  bool get isLoggedIn => _user != null;
   bool get loading => _loading;
 
-  String? get error => _error;
+  Future<void> login(String email, String password) async {
+    _loading = true;
+    notifyListeners();
 
-  bool get isAuthenticated => _user != null;
+    await Future.delayed(const Duration(milliseconds: 700));
 
-  Future<bool> login({
-    required String email,
-    required String password,
-  }) async {
-    _setLoading(true);
-    _error = null;
+    _user = AppUser(
+      id: 1,
+      name: 'Victoria',
+      email: email,
+      phone: '+254700000000',
+      xp: 240,
+      rewardPoints: 120,
+      streak: 6,
+      emailVerified: true,
+    );
 
-    try {
-      final response = await AuthService.login(
-        email: email,
-        password: password,
-      );
-
-      if (response['user'] != null) {
-        _user = User.fromJson(response['user']);
-      } else {
-        _user = await AuthService.getCurrentUser();
-      }
-
-      notifyListeners();
-
-      return true;
-    } catch (e) {
-      _error = e.toString();
-
-      notifyListeners();
-
-      return false;
-    } finally {
-      _setLoading(false);
-    }
-  }
-
-  Future<bool> register({
-    required String name,
-    required String email,
-    required String password,
-    required String passwordConfirmation,
-    String? phone,
-  }) async {
-    _setLoading(true);
-    _error = null;
-
-    try {
-      await AuthService.register(
-        name: name,
-        email: email,
-        password: password,
-        passwordConfirmation: passwordConfirmation,
-        phone: phone,
-      );
-
-      notifyListeners();
-
-      return true;
-    } catch (e) {
-      _error = e.toString();
-
-      notifyListeners();
-
-      return false;
-    } finally {
-      _setLoading(false);
-    }
-  }
-
-  Future<bool> restoreSession() async {
-    _setLoading(true);
-    _error = null;
-
-    try {
-      final token = await StorageService.getToken();
-
-      if (token == null) {
-        return false;
-      }
-
-      _user = await AuthService.getCurrentUser();
-
-      notifyListeners();
-
-      return true;
-    } catch (_) {
-      await StorageService.removeToken();
-
-      _user = null;
-
-      notifyListeners();
-
-      return false;
-    } finally {
-      _setLoading(false);
-    }
+    _loading = false;
+    notifyListeners();
   }
 
   Future<void> logout() async {
-    await AuthService.logout();
-
     _user = null;
-    _error = null;
-
     notifyListeners();
   }
 
-  void clearError() {
-    _error = null;
-
-    notifyListeners();
-  }
-
-  void _setLoading(bool value) {
-    _loading = value;
-
+  void setUser(AppUser user) {
+    _user = user;
     notifyListeners();
   }
 }
