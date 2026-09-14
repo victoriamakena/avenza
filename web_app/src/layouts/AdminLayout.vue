@@ -1,64 +1,87 @@
 <template>
-  <v-dialog
-    :model-value="modelValue"
-    max-width="430"
-    @update:model-value="$emit('update:modelValue', $event)"
-  >
-    <v-card>
-      <v-card-title class="text-h6">
-        {{ title }}
-      </v-card-title>
+  <v-app>
+    <v-navigation-drawer
+      permanent
+      color="surface"
+    >
+      <v-list-item
+        title="Avenza"
+        subtitle="Admin Portal"
+        class="py-4"
+      />
 
-      <v-card-text>
-        {{ message }}
-      </v-card-text>
+      <v-divider />
 
-      <v-card-actions class="pa-4">
-        <v-spacer />
+      <v-list nav density="comfortable">
+        <v-list-item
+          to="/admin"
+          prepend-icon="mdi-view-dashboard-outline"
+          title="Dashboard"
+          exact
+        />
+        <v-list-item
+          to="/admin/users"
+          prepend-icon="mdi-account-group-outline"
+          title="Users"
+        />
+        <v-list-item
+          to="/admin/goals"
+          prepend-icon="mdi-flag-outline"
+          title="Goals"
+        />
+        <v-list-item
+          to="/admin/lessons"
+          prepend-icon="mdi-book-open-outline"
+          title="Lessons"
+        />
+        <v-list-item
+          to="/admin/achievements"
+          prepend-icon="mdi-medal-outline"
+          title="Achievements"
+        />
+        <v-list-item
+          to="/admin/rewards"
+          prepend-icon="mdi-gift-outline"
+          title="Rewards"
+        />
+        <v-list-item
+          to="/admin/redemptions"
+          prepend-icon="mdi-swap-horizontal"
+          title="Redemptions"
+        />
+      </v-list>
 
-        <v-btn
-          variant="text"
-          @click="$emit('update:modelValue', false)"
-        >
-          Cancel
-        </v-btn>
+      <template #append>
+        <div class="pa-3">
+          <v-btn
+            block
+            variant="tonal"
+            prepend-icon="mdi-logout"
+            @click="handleLogout"
+          >
+            Log out
+          </v-btn>
+        </div>
+      </template>
+    </v-navigation-drawer>
 
-        <v-btn
-          color="error"
-          @click="$emit('confirm')"
-        >
-          {{ confirmText }}
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+    <v-main>
+      <div class="pa-6">
+        <router-view />
+      </div>
+    </v-main>
+  </v-app>
 </template>
 
 <script setup>
-defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
 
-  title: {
-    type: String,
-    default: 'Confirm action',
-  },
+const router = useRouter()
+const authStore = useAuthStore()
 
-  message: {
-    type: String,
-    default: 'Are you sure?',
-  },
-
-  confirmText: {
-    type: String,
-    default: 'Confirm',
-  },
-})
-
-defineEmits([
-  'update:modelValue',
-  'confirm',
-])
+const handleLogout = async () => {
+  await authStore.logout()
+  router.push('/login')
+}
 </script>

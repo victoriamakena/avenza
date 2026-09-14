@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import '../../widgets/progress_card.dart';
 import '../../widgets/section_title.dart';
 import '../../widgets/stat_card.dart';
-import '../../navigation/app_navigation.dart';
-import '../goals/create_goal_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

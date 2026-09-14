@@ -59,8 +59,6 @@ class _OnboardingScreenState
 
   @override
   Widget build(BuildContext context) {
-    final page = pages[_currentPage];
-
     return Scaffold(
       body: SafeArea(
         child: Padding(

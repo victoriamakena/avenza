@@ -1,61 +1,36 @@
 <template>
-  <v-card class="stat-card pa-5">
-    <div class="d-flex justify-space-between align-start">
-      <div>
-        <div class="stat-label">
-          {{ label }}
-        </div>
+  <div
+    class="d-flex flex-column flex-sm-row justify-space-between align-start align-sm-center ga-4 mb-6"
+  >
+    <div>
+      <h1 class="page-title">
+        {{ title }}
+      </h1>
 
-        <div class="stat-value">
-          {{ value }}
-        </div>
-
-        <div
-          v-if="subtitle"
-          class="text-caption text-medium-emphasis mt-1"
-        >
-          {{ subtitle }}
-        </div>
-      </div>
-
-      <v-avatar
-        :color="color"
-        size="44"
+      <p
+        v-if="subtitle"
+        class="page-subtitle mb-0"
       >
-        <v-icon
-          :icon="icon"
-          color="white"
-        />
-      </v-avatar>
+        {{ subtitle }}
+      </p>
     </div>
-  </v-card>
+
+    <div>
+      <slot name="actions" />
+    </div>
+  </div>
 </template>
 
 <script setup>
 defineProps({
-  label: {
+  title: {
     type: String,
     required: true,
-  },
-
-  value: {
-    type: [String, Number],
-    default: 0,
   },
 
   subtitle: {
     type: String,
     default: '',
-  },
-
-  icon: {
-    type: String,
-    default: 'mdi-chart-box-outline',
-  },
-
-  color: {
-    type: String,
-    default: 'primary',
   },
 })
 </script>

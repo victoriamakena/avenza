@@ -1,39 +1,61 @@
 <template>
-  <div class="empty-state">
-    <v-icon
-      :icon="icon"
-      size="56"
-      color="grey"
-      class="mb-4"
-    />
+  <v-dialog
+    :model-value="modelValue"
+    max-width="430"
+    @update:model-value="$emit('update:modelValue', $event)"
+  >
+    <v-card>
+      <v-card-title class="text-h6">
+        {{ title }}
+      </v-card-title>
 
-    <h3 class="text-h6 mb-2">
-      {{ title }}
-    </h3>
+      <v-card-text>
+        {{ message }}
+      </v-card-text>
 
-    <p class="text-medium-emphasis mb-4">
-      {{ message }}
-    </p>
+      <v-card-actions class="pa-4">
+        <v-spacer />
 
-    <slot />
-  </div>
+        <v-btn
+          variant="text"
+          @click="$emit('update:modelValue', false)"
+        >
+          Cancel
+        </v-btn>
+
+        <v-btn
+          color="error"
+          @click="$emit('confirm')"
+        >
+          {{ confirmText }}
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
 defineProps({
+  modelValue: {
+    type: Boolean,
+    default: false,
+  },
+
   title: {
     type: String,
-    default: 'No data found',
+    default: 'Confirm action',
   },
 
   message: {
     type: String,
-    default: 'There is nothing to display yet.',
+    default: 'Are you sure?',
   },
 
-  icon: {
+  confirmText: {
     type: String,
-    default: 'mdi-information-outline',
+    default: 'Confirm',
   },
 })
+
+defineEmits(['update:modelValue', 'confirm'])
 </script>

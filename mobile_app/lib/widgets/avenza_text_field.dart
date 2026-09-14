@@ -7,6 +7,7 @@ class AvenzaTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final bool obscureText;
   final IconData? prefixIcon;
+  final Widget? suffixIcon;
   final String? Function(String?)? validator;
 
   const AvenzaTextField({
@@ -17,6 +18,7 @@ class AvenzaTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
     this.prefixIcon,
+    this.suffixIcon,
     this.validator,
   });
 
@@ -30,9 +32,8 @@ class AvenzaTextField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
-        prefixIcon: prefixIcon != null
-            ? Icon(prefixIcon)
-            : null,
+        prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+        suffixIcon: suffixIcon,
       ),
     );
   }

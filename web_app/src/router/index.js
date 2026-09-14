@@ -20,8 +20,7 @@ import Achievements from '../views/Achievements.vue'
 
 import Rewards from '../views/Rewards.vue'
 import Redemptions from '../views/Redemptions.vue'
-
-import { useAuth } from '../stores/auth'
+import { useAuthStore } from '../stores/auth'
 
 const routes = [
   {
@@ -128,8 +127,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
-  const authStore = useAuth()
-
+const authStore = useAuthStore()
   if (
     to.meta.requiresAuth &&
     !authStore.isAuthenticated

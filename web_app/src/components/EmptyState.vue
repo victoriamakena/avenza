@@ -1,23 +1,21 @@
 <template>
-  <div
-    class="d-flex flex-column flex-sm-row justify-space-between align-start align-sm-center ga-4 mb-6"
-  >
-    <div>
-      <h1 class="page-title">
-        {{ title }}
-      </h1>
+  <div class="empty-state">
+    <v-icon
+      :icon="icon"
+      size="56"
+      color="grey"
+      class="mb-4"
+    />
 
-      <p
-        v-if="subtitle"
-        class="page-subtitle mb-0"
-      >
-        {{ subtitle }}
-      </p>
-    </div>
+    <h3 class="text-h6 mb-2">
+      {{ title }}
+    </h3>
 
-    <div>
-      <slot name="actions" />
-    </div>
+    <p class="text-medium-emphasis mb-4">
+      {{ message }}
+    </p>
+
+    <slot />
   </div>
 </template>
 
@@ -25,12 +23,17 @@
 defineProps({
   title: {
     type: String,
-    required: true,
+    default: 'No data found',
   },
 
-  subtitle: {
+  message: {
     type: String,
-    default: '',
+    default: 'There is nothing to display yet.',
+  },
+
+  icon: {
+    type: String,
+    default: 'mdi-information-outline',
   },
 })
 </script>

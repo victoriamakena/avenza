@@ -25,31 +25,6 @@ class _LoginScreenState
   final passwordController =
       TextEditingController();
 
-  bool loading = false;
-
-  Future<void> _login() async {
-    setState(() {
-      loading = true;
-    });
-
-    await Future.delayed(
-      const Duration(milliseconds: 700),
-    );
-
-    if (!mounted) return;
-
-    setState(() {
-      loading = false;
-    });
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const AppNavigation(),
-      ),
-    );
-  }
-
   @override
   void dispose() {
     emailController.dispose();

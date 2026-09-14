@@ -1,31 +1,54 @@
-import api from './api'
+import { defineStore } from 'pinia'
+import api from '../services/api'
 
-export default {
-  async login(credentials) {
-    const response = await api.post('/auth/login', credentials)
-    return response.data
+export const useAuthStore = defineStore('auth', {
+  state: () => ({
+    user: null,
+    token: localStorage.getItem('avenza_token') || null,
+  }),
+
+  getters: {
+    isAuthenticated: (state) => !!state.token,
+    isAdmin: (state) => state.user?.role === 'admin',
   },
 
-  async logout() {
-    const response = await api.post('/auth/logout')
-    return response.data
-  },
+  actions: {
+    async login(credentials) {
+      const response = await api.post('/auth/login', credentials)
 
-  async getCurrentUser() {
-    const response = await api.get('/auth/me')
-    return response.data
-  },
+      this.token = response.data.token
+      this.user = response.data.user
 
-  async forgotPassword(email) {
-    const response = await api.post('/auth/forgot-password', {
-      email,
-    })
+      localStorage.setItem('avenza_token', this.token)
 
-    return response.data
-  },
+      return response.data
+    },
 
-  async resetPassword(data) {
-    const response = await api.post('/auth/reset-password', data)
-    return response.data
+    async logout() {
+      try {
+        await api.post('/auth/logout')
+      } finally {
+        this.token = null
+        this.user = null
+        localStorage.removeItem('avenza_token')
+      }
+    },
+
+    async fetchUser() {
+      const response = await api.get('/auth/me')
+      this.user = response.data.user
+
+      return this.user
+    },
+
+    async forgotPassword(email) {
+      const response = await api.post('/auth/forgot-password', { email })
+      return response.data
+    },
+
+    async resetPassword(data) {
+      const response = await api.post('/auth/reset-password', data)
+      return response.data
+    },
   },
-}
+})
