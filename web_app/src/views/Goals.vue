@@ -83,7 +83,7 @@ import {
 import PageHeader from '../components/PageHeader.vue'
 import EmptyState from '../components/EmptyState.vue'
 
-import goalService from '../services/goalService'
+import goalService from '../services/goal'
 
 const goals = ref([])
 const search = ref('')

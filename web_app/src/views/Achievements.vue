@@ -127,7 +127,7 @@ import {
 import PageHeader from '../components/PageHeader.vue'
 import EmptyState from '../components/EmptyState.vue'
 
-import achievementService from '../services/achievementService'
+import achievementService from '../services/achievement'
 
 const achievements = ref([])
 const loading = ref(false)

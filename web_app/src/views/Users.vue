@@ -103,7 +103,7 @@ import { onMounted, ref } from 'vue'
 import PageHeader from '../components/PageHeader.vue'
 import EmptyState from '../components/EmptyState.vue'
 
-import userService from '../services/userService'
+import userService from '../services/user'
 
 const users = ref([])
 const search = ref('')

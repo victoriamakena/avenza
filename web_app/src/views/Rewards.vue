@@ -170,7 +170,7 @@ import PageHeader from '../components/PageHeader.vue'
 import EmptyState from '../components/EmptyState.vue'
 import ConfirmDialog from '../components/ConfirmDialog.vue'
 
-import rewardService from '../services/rewardService'
+import rewardService from '../services/reward'
 
 const rewards = ref([])
 

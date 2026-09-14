@@ -1,7 +1,4 @@
-import {
-  createRouter,
-  createWebHistory,
-} from 'vue-router'
+import { createRouter,createWebHistory, } from 'vue-router'
 
 import Login from '../views/Login.vue'
 import ForgotPassword from '../views/ForgotPassword.vue'

@@ -143,7 +143,7 @@ import { useRoute } from 'vue-router'
 
 import PageHeader from '../components/PageHeader.vue'
 
-import userService from '../services/userService'
+import userService from '../services/user'
 
 const route = useRoute()
 

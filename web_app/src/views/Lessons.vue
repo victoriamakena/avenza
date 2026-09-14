@@ -130,7 +130,7 @@ import PageHeader from '../components/PageHeader.vue'
 import EmptyState from '../components/EmptyState.vue'
 import ConfirmDialog from '../components/ConfirmDialog.vue'
 
-import lessonService from '../services/lessonService'
+import lessonService from '../services/lesson'
 
 const lessons = ref([])
 const loading = ref(false)

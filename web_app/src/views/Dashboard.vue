@@ -75,7 +75,7 @@ import { onMounted, reactive, ref } from 'vue'
 import StatCard from '../components/StatCard.vue'
 import PageHeader from '../components/PageHeader.vue'
 
-import dashboardService from '../services/dashboardService'
+import dashboardService from '../services/dashboard'
 
 const loading = ref(false)
 const errorMessage = ref('')

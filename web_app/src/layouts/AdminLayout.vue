@@ -1,54 +1,40 @@
 <template>
-  <v-app>
-    <v-navigation-drawer
-      permanent
-      color="surface"
-    >
-      <v-list-item
-        title="Avenza"
-        subtitle="Admin Portal"
-        class="py-4"
-      />
+     <v-app>
+    <!-- Top App Bar with Toggle Button -->
+    <v-app-bar elevation="1" color="primary">
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-title>Avenza Admin</v-app-bar-title>
+    </v-app-bar>
 
-      <v-divider />
+    <!-- Navigation Drawer -->
+    <!-- 1. "rounded-r-xl" gives it smooth rounded right edges -->
+    <!-- 2. "v-model" handles the sliding entry and exit animation -->
+    <v-navigation-drawer
+      v-model="drawer"
+      class="rounded-r-xl"
+      color="primary"
+      theme="dark"
+    >
+      <!-- 3. Logo Container replacing the old text titles -->
+      <div class="pa-4 d-flex justify-center align-center">
+        <v-img
+          src="@/public/logo.png"
+          alt="Avenza Logo"
+          max-height="50"
+          contain
+        ></v-img>
+      </div>
+
+      <v-divider></v-divider>
 
       <v-list nav density="comfortable">
-        <v-list-item
-          to="/admin"
-          prepend-icon="mdi-view-dashboard-outline"
-          title="Dashboard"
-          exact
-        />
-        <v-list-item
-          to="/admin/users"
-          prepend-icon="mdi-account-group-outline"
-          title="Users"
-        />
-        <v-list-item
-          to="/admin/goals"
-          prepend-icon="mdi-flag-outline"
-          title="Goals"
-        />
-        <v-list-item
-          to="/admin/lessons"
-          prepend-icon="mdi-book-open-outline"
-          title="Lessons"
-        />
-        <v-list-item
-          to="/admin/achievements"
-          prepend-icon="mdi-medal-outline"
-          title="Achievements"
-        />
-        <v-list-item
-          to="/admin/rewards"
-          prepend-icon="mdi-gift-outline"
-          title="Rewards"
-        />
-        <v-list-item
-          to="/admin/redemptions"
-          prepend-icon="mdi-swap-horizontal"
-          title="Redemptions"
-        />
+        <v-list-item to="/admin"prepend-icon="mdi-view-quilt"title="Dashboard"exact/>
+        <v-list-item to="/admin/users"prepend-icon="mdi-account-cog"title="Users"/>
+        <v-list-item to="/admin/goals"prepend-icon="mdi-bullseye-arrow"title="Goals"/>
+        <v-list-item to="/admin/lessons"prepend-icon="mdi-school"title="Lessons"/>
+        <v-list-item to="/admin/achievements"prepend-icon="mdi-star-circle"title="Achievements"/>
+        <v-list-item to="/admin/rewards" prepend-icon="mdi-gift" title="Rewards"/>
+        <v-list-item to="/admin/redemptions" prepend-icon="mdi-hand-coin" title="Redemptions"/>
       </v-list>
 
       <template #append>
@@ -66,11 +52,11 @@
     </v-navigation-drawer>
 
     <v-main>
-      <div class="pa-6">
+      <v-container>
         <router-view />
-      </div>
+      </v-container>
     </v-main>
-  </v-app>
+    </v-app>
 </template>
 
 <script setup>
