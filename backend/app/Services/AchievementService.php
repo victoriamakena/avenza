@@ -4,60 +4,22 @@ namespace App\Services;
 
 use App\Models\Achievement;
 use App\Models\User;
-use App\Models\UserAchievement;
 use Illuminate\Support\Facades\DB;
 
 class AchievementService
 {
-    public function checkSavingAchievements(User $user): void
+    public function checkAll(User $user): void
     {
-        $totalSavings = $user->transactions()
-            ->where('type', 'saving')
-            ->where('status', 'completed')
-            ->sum('amount');
+        $achievements = Achievement::where('active', true)->get();
 
-        $savingCount = $user->transactions()
-            ->where('type', 'saving')
-            ->where('status', 'completed')
-            ->count();
-
-        $this->unlock(
-            $user,
-            'first-saving',
-            $savingCount >= 1
-        );
-
-        $this->unlock(
-            $user,
-            'saved-1000',
-            $totalSavings >= 1000
-        );
-
-        $this->unlock(
-            $user,
-            'saved-10000',
-            $totalSavings >= 10000
-        );
+        foreach ($achievements as $achievement) {
+            $this->evaluate($user, $achievement);
+        }
     }
 
-    public function unlock(
-        User $user,
-        string $slug,
-        bool $condition
-    ): void {
-        if (! $condition) {
-            return;
-        }
-
-        $achievement = Achievement::where('slug', $slug)
-            ->where('active', true)
-            ->first();
-
-        if (! $achievement) {
-            return;
-        }
-
-        $alreadyUnlocked = UserAchievement::where('user_id', $user->id)
+    protected function evaluate(User $user, Achievement $achievement): void
+    {
+        $alreadyUnlocked = $user->achievements()
             ->where('achievement_id', $achievement->id)
             ->exists();
 
@@ -65,11 +27,46 @@ class AchievementService
             return;
         }
 
-        DB::transaction(function () use ($user, $achievement) {
+        $currentValue = $this->currentValueFor($user, $achievement->criteria_type);
 
-            UserAchievement::create([
-                'user_id' => $user->id,
-                'achievement_id' => $achievement->id,
+        if ($currentValue === null || $currentValue < $achievement->criteria_value) {
+            return;
+        }
+
+        $this->unlock($user, $achievement);
+    }
+
+    protected function currentValueFor(User $user, string $criteriaType): ?int
+    {
+        return match ($criteriaType) {
+            'total_saved' => (int) $user->transactions()
+                ->where('type', 'saving')
+                ->where('status', 'completed')
+                ->sum('amount'),
+
+            'savings_count' => $user->transactions()
+                ->where('type', 'saving')
+                ->where('status', 'completed')
+                ->count(),
+
+            'goals_completed' => $user->goals()
+                ->where('status', 'completed')
+                ->count(),
+
+            'lessons_completed' => $user->lessons()
+                ->wherePivot('completed', true)
+                ->count(),
+
+            'streak_days' => $user->current_streak,
+
+            default => null,
+        };
+    }
+
+    protected function unlock(User $user, Achievement $achievement): void
+    {
+        DB::transaction(function () use ($user, $achievement) {
+            $user->achievements()->attach($achievement->id, [
                 'unlocked_at' => now(),
             ]);
 
@@ -83,10 +80,7 @@ class AchievementService
             }
 
             if ($achievement->points_reward > 0) {
-                $user->increment(
-                    'reward_points',
-                    $achievement->points_reward
-                );
+                $user->increment('reward_points', $achievement->points_reward);
             }
         });
     }

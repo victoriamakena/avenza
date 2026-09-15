@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Lesson;
 use App\Models\LessonProgress;
+use App\Services\AchievementService;
 use App\Services\XpService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -55,7 +56,8 @@ class LearningController extends Controller
     public function complete(
         Request $request,
         Lesson $lesson,
-        XpService $xpService
+        XpService $xpService,
+        AchievementService $achievementService
     ) {
         if (! $lesson->active) {
             return response()->json([
@@ -67,7 +69,8 @@ class LearningController extends Controller
             $result = DB::transaction(function () use (
                 $request,
                 $lesson,
-                $xpService
+                $xpService,
+                $achievementService
             ) {
                 $progress = LessonProgress::firstOrCreate(
                     [
@@ -104,6 +107,8 @@ class LearningController extends Controller
                 ];
             });
 
+            $achievementService->checkAll($request->user());
+            
             return response()->json([
                 'message' => $result['already_completed']
                     ? 'Lesson was already completed.'

@@ -65,7 +65,7 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
           description: descriptionController.text.trim(),
           targetAmount: amount,
           targetDate: selectedDate!,
-          icon: '🎯',
+          category: 'other',
         );
 
     ScaffoldMessenger.of(context).showSnackBar(

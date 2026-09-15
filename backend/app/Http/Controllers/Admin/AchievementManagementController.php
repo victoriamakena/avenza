@@ -11,7 +11,7 @@ class AchievementManagementController extends Controller
     public function index()
     {
         return response()->json([
-            'achievements' => Achievement::latest()->get(),
+            'achievements' => Achievement::where('active', true)->latest()->get(),
         ]);
     }
 
@@ -43,8 +43,11 @@ class AchievementManagementController extends Controller
         $validated = $request->validate([
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'description' => ['sometimes', 'required', 'string'],
+            'icon' => ['sometimes', 'nullable', 'string', 'max:100'],
             'xp_reward' => ['sometimes', 'required', 'integer', 'min:0'],
             'points_reward' => ['sometimes', 'required', 'integer', 'min:0'],
+            'criteria_type' => ['sometimes', 'required', 'string', 'max:100'],
+            'criteria_value' => ['sometimes', 'required', 'integer', 'min:1'],
             'active' => ['sometimes', 'boolean'],
         ]);
 
@@ -53,6 +56,17 @@ class AchievementManagementController extends Controller
         return response()->json([
             'message' => 'Achievement updated successfully.',
             'achievement' => $achievement->fresh(),
+        ]);
+    }
+
+    public function destroy(Achievement $achievement)
+    {
+        $achievement->update([
+            'active' => false,
+        ]);
+
+        return response()->json([
+            'message' => 'Achievement deactivated successfully.',
         ]);
     }
 }

@@ -11,8 +11,7 @@ class RewardManagementController extends Controller
     public function index()
     {
         return response()->json([
-            'rewards' => Reward::latest()->paginate(25),
-        ]);
+        'rewards' => Reward::where('active', true)->latest()->paginate(25)        ]);
     }
 
     public function store(Request $request)

@@ -86,6 +86,34 @@
             label="Content"
             rows="6"
           />
+          <v-text-field
+                v-model="form.category"
+                label="Category"
+                placeholder="e.g. Budgeting, Saving"
+                class="mb-3"
+              />
+
+              <v-select
+                v-model="form.language"
+                label="Language"
+                :items="[{ title: 'English', value: 'en' }, { title: 'Swahili', value: 'sw' }]"
+                class="mb-3"
+              />
+
+              <v-text-field
+                v-model.number="form.xp_reward"
+                label="XP reward"
+                type="number"
+                min="0"
+                class="mb-3"
+              />
+
+              <v-text-field
+                v-model.number="form.estimated_minutes"
+                label="Estimated minutes"
+                type="number"
+                min="1"
+              />
         </v-card-text>
 
         <v-card-actions class="pa-4">
@@ -147,6 +175,10 @@ const errorMessage = ref('')
 const form = reactive({
   title: '',
   content: '',
+  category: '',
+  language: 'en',
+  xp_reward: 10,
+  estimated_minutes: 5,
 })
 
 const headers = [
@@ -168,6 +200,10 @@ const headers = [
 const resetForm = () => {
   form.title = ''
   form.content = ''
+  form.category = ''
+  form.language = 'en'
+  form.xp_reward = 10
+  form.estimated_minutes = 5
 }
 
 const loadLessons = async () => {
@@ -205,6 +241,10 @@ const openEdit = (lesson) => {
 
   form.title = lesson.title || ''
   form.content = lesson.content || ''
+  form.category = lesson.category || ''
+  form.language = lesson.language || 'en'
+  form.xp_reward = lesson.xp_reward ?? 10
+  form.estimated_minutes = lesson.estimated_minutes ?? 5
 
   dialog.value = true
 }

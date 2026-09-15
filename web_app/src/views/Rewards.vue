@@ -112,6 +112,13 @@
             class="mb-3"
           />
 
+          <v-select
+              v-model="form.type"
+              label="Type"
+              :items="['airtime', 'data', 'voucher', 'discount']"
+              class="mb-3"
+            />
+            
           <v-text-field
             v-model.number="form.points_cost"
             label="Points cost"
@@ -189,6 +196,7 @@ const errorMessage = ref('')
 const form = reactive({
   name: '',
   description: '',
+  type: '',
   points_cost: 0,
   active: true,
 })
@@ -220,6 +228,7 @@ const headers = [
 const resetForm = () => {
   form.name = ''
   form.description = ''
+  form.type = ''
   form.points_cost = 0
   form.active = true
 }
@@ -254,6 +263,7 @@ const openCreate = () => {
 }
 
 const openEdit = (reward) => {
+  form.type = reward.type || ''
   editing.value = true
   selectedReward.value = reward
 

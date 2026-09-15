@@ -11,8 +11,7 @@ class LessonManagementController extends Controller
     public function index()
     {
         return response()->json([
-            'lessons' => Lesson::latest()->paginate(25),
-        ]);
+        'lessons' => Lesson::where('active', true)->latest()->paginate(25),         ]);
     }
 
     public function store(Request $request)

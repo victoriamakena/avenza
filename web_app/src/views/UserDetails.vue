@@ -173,9 +173,7 @@ const loadUser = async () => {
         route.params.id,
       )
 
-    user.value =
-      data.user?.data ||
-      data
+    user.value = data.user
   } catch (error) {
     errorMessage.value =
       error.response?.data?.message ||

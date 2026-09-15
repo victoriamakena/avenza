@@ -61,7 +61,6 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
-    Route::get('/dashboard', [AdminDashboardController::class, 'index']);
 
     // Goals
     Route::prefix('goals')->group(function () {
@@ -92,6 +91,8 @@ Route::prefix('admin')
     ->middleware(['auth:sanctum', 'verified', 'admin'])
     ->group(function () {
 
+        Route::get('/dashboard', [AdminDashboardController::class, 'index']);
+
         Route::get('/users', [UserManagementController::class, 'index']);
         Route::get('/users/{user}', [UserManagementController::class, 'show']);
         Route::put('/users/{user}', [UserManagementController::class, 'update']);
@@ -107,6 +108,7 @@ Route::prefix('admin')
         Route::get('/achievements', [AchievementManagementController::class, 'index']);
         Route::post('/achievements', [AchievementManagementController::class, 'store']);
         Route::put('/achievements/{achievement}', [AchievementManagementController::class, 'update']);
+        Route::delete('/achievements/{achievement}', [AchievementManagementController::class, 'destroy']); 
 
         Route::get('/rewards', [RewardManagementController::class, 'index']);
         Route::post('/rewards', [RewardManagementController::class, 'store']);

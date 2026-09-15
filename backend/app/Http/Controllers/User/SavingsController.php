@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Goal;
+use App\Services\AchievementService;
 use App\Services\XpService;
 use App\Services\StreakService;
 use Illuminate\Http\Request;
@@ -15,7 +16,8 @@ class SavingsController extends Controller
     public function store(
         Request $request,
         XpService $xpService,
-        StreakService $streakService
+        StreakService $streakService,
+        AchievementService $achievementService
     ) {
         $request->validate([
             'goal_id' => 'required|exists:goals,id',
@@ -51,7 +53,8 @@ class SavingsController extends Controller
                 $user,
                 $goal,
                 $xpService,
-                $streakService
+                $streakService,
+                $achievementService
             ) {
 
                 // Create transaction
@@ -85,6 +88,7 @@ class SavingsController extends Controller
 
                 // Update saving streak
                 $streakService->update($user);
+                $achievementService->checkAll($user);
             });
 
             return response()->json([
